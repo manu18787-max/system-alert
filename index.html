@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Locked</title>
+<title>System Alert</title>
 
 <style>
 html, body {
@@ -17,7 +17,7 @@ html, body {
 }
 
 #lock {
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -25,19 +25,19 @@ html, body {
     text-align: center;
 }
 
-.lock {
-    font-size: 55px;
+.icon {
+    font-size: 60px;
     margin-bottom: 20px;
 }
 
 h1 {
-    font-size: 25px;
+    font-size: 26px;
     font-weight: normal;
 }
 
 #timer {
-    font-size: 20px;
     color: #aaa;
+    font-size: 19px;
 }
 
 #done {
@@ -51,9 +51,13 @@ h1 {
 <body>
 
 <div id="lock">
-    <div class="lock">🔒</div>
+    <div class="icon">🔒</div>
+
     <h1>SYSTEM LOCKED</h1>
-    <div id="timer">Unlocking in 60 seconds...</div>
+
+    <div id="timer">
+        Unlocking in 60 seconds...
+    </div>
 </div>
 
 <div id="done">
@@ -62,6 +66,15 @@ h1 {
 </div>
 
 <script>
+
+// Keep the prank page in browser history
+history.pushState(null, "", location.href);
+
+window.addEventListener("popstate", function () {
+    history.pushState(null, "", location.href);
+});
+
+// 60-second countdown
 let seconds = 60;
 
 let countdown = setInterval(function () {
@@ -72,12 +85,15 @@ let countdown = setInterval(function () {
         "Unlocking in " + seconds + " seconds...";
 
     if (seconds <= 0) {
+
         clearInterval(countdown);
+
         document.getElementById("lock").style.display = "none";
         document.getElementById("done").style.display = "block";
     }
 
 }, 1000);
+
 </script>
 
 </body>
