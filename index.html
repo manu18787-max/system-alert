@@ -6,58 +6,81 @@
 <title>System Alert</title>
 
 <style>
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
 }
 
-#lock {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+#start{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
 }
 
-.icon {
-    font-size: 60px;
-    margin-bottom: 20px;
+#start button{
+    background:#fff;
+    color:#000;
+    border:0;
+    padding:16px 25px;
+    border-radius:8px;
+    font-size:18px;
 }
 
-h1 {
-    font-size: 26px;
-    font-weight: normal;
+#lock{
+    display:none;
+    height:100vh;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
 }
 
-#timer {
-    color: #aaa;
-    font-size: 19px;
+.icon{
+    font-size:65px;
+    margin-bottom:20px;
 }
 
-#done {
-    display: none;
-    text-align: center;
-    margin-top: 40vh;
+h1{
+    font-size:27px;
+    font-weight:normal;
+}
+
+#timer{
+    color:#aaa;
+    font-size:19px;
+}
+
+#done{
+    display:none;
+    height:100vh;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
 }
 </style>
 </head>
 
 <body>
 
+<div id="start">
+    <div>
+        <h2>System Security Check</h2>
+        <p>Tap below to continue</p>
+        <button onclick="startPrank()">CONTINUE</button>
+    </div>
+</div>
+
 <div id="lock">
     <div class="icon">🔒</div>
-
     <h1>SYSTEM LOCKED</h1>
-
-    <div id="timer">
-        Unlocking in 60 seconds...
-    </div>
+    <div id="timer">Unlocking in 60 seconds...</div>
 </div>
 
 <div id="done">
@@ -67,32 +90,38 @@ h1 {
 
 <script>
 
-// Keep the prank page in browser history
-history.pushState(null, "", location.href);
+async function startPrank(){
 
-window.addEventListener("popstate", function () {
-    history.pushState(null, "", location.href);
-});
+    try{
+        await document.documentElement.requestFullscreen();
+    }catch(e){}
 
-// 60-second countdown
-let seconds = 60;
+    document.getElementById("start").style.display="none";
+    document.getElementById("lock").style.display="flex";
 
-let countdown = setInterval(function () {
+    let seconds=60;
 
-    seconds--;
+    let countdown=setInterval(function(){
 
-    document.getElementById("timer").innerText =
-        "Unlocking in " + seconds + " seconds...";
+        seconds--;
 
-    if (seconds <= 0) {
+        document.getElementById("timer").innerText =
+            "Unlocking in " + seconds + " seconds...";
 
-        clearInterval(countdown);
+        if(seconds<=0){
 
-        document.getElementById("lock").style.display = "none";
-        document.getElementById("done").style.display = "block";
-    }
+            clearInterval(countdown);
 
-}, 1000);
+            if(document.fullscreenElement){
+                document.exitFullscreen().catch(()=>{});
+            }
+
+            document.getElementById("lock").style.display="none";
+            document.getElementById("done").style.display="flex";
+        }
+
+    },1000);
+}
 
 </script>
 
